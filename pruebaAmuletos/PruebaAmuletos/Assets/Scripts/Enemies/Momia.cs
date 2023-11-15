@@ -23,6 +23,7 @@ public class Momia : MonoBehaviour
     
     private Rigidbody2D rb;
     [SerializeField] private Transform controladorGolpe;
+    public Transform[] puntosDePatrullaje;
 
     private void Start()
     {
