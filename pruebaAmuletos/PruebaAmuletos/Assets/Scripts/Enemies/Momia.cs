@@ -52,7 +52,7 @@ public class Momia : MonoBehaviour
 
     private bool CheckForPlayer()
     {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, detectionRange);
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, playerRange);
 
         foreach (Collider2D collider in colliders)
         {
@@ -158,7 +158,10 @@ public class Momia : MonoBehaviour
 
         target.position = targetPosition;
     }
+    void Patrullaje()
+    {
 
+    }
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.blue;
