@@ -6,42 +6,52 @@ using UnityEngine;
 
 public class EnemigoDistancia : MonoBehaviour
 {
-    [SerializeField]private float speed;
-    [SerializeField]private float minDistance;
-    [SerializeField] private Transform player;
-
-    public float shootingRange;
-    public float fireRate = 1f;
-    private float nextFireTime;
-    public GameObject bullet;
-    public GameObject bulletParent;
-
-    private void Start()
-    {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
-        
-    }
-
-    
+    public Transform jugador; // Referencia al transform del jugador
+    public float rangoDisparo = 5f; // Rango de disparo del enemigo
+    public float distanciaMinima = 2.5f; // Distancia mínima que el enemigo debe mantener respecto al jugador
+    public float velocidadRetroceso = 2f; // Velocidad a la que el enemigo retrocede
+    public GameObject balaPrefab; // Prefab de la bala
+    public Transform puntoDisparo; // Punto desde donde saldrá la bala
+    public float tiempoEntreDisparos = 2f; // Tiempo entre cada disparo
+    private bool puedeDisparar = true; // Indica si el enemigo puede disparar
 
     void Update()
     {
-        float distanceFromPlayer = Vector2.Distance(player.position, transform.position);
-        if(distanceFromPlayer < minDistance && distanceFromPlayer > shootingRange)
+        float distanciaAlJugador = Vector3.Distance(transform.position, jugador.position);
+
+        if (distanciaAlJugador <= rangoDisparo && puedeDisparar)
         {
-            transform.position = Vector2.MoveTowards(this.transform.position, player.position, speed * Time.deltaTime);
+            DispararAlJugador();
+            StartCoroutine(EsperarParaDisparar());
         }
-        else if(distanceFromPlayer <= shootingRange && nextFireTime < Time.time)
+
+        if (distanciaAlJugador < distanciaMinima)
         {
-            Instantiate(bullet,bulletParent.transform.position,Quaternion.identity);
-            nextFireTime = Time.time + fireRate;
+            Vector3 direccionRetroceso = (transform.position - jugador.position).normalized;
+            transform.position += direccionRetroceso * velocidadRetroceso * Time.deltaTime;
         }
     }
 
-    private void OnDrawGizmosSelected()
+    void DispararAlJugador()
     {
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, minDistance);
-        Gizmos.DrawWireSphere(transform.position, shootingRange);
+        Debug.Log("¡El enemigo dispara al jugador!");
+        GameObject bala = Instantiate(balaPrefab, puntoDisparo.position, puntoDisparo.rotation);
+    }
+
+    System.Collections.IEnumerator EsperarParaDisparar()
+    {
+        puedeDisparar = false;
+        yield return new WaitForSeconds(tiempoEntreDisparos);
+        puedeDisparar = true;
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, rangoDisparo);
+
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, distanciaMinima);
     }
 }
+

@@ -9,38 +9,38 @@ public class patrolEnemie : MonoBehaviour
     [SerializeField] private float speed;
     [SerializeField] private float waitTime;
 
-    private int currentWayPoint;
-    private bool isWaiting;
+    private int currentWayPoint = 0; // Inicialmente, el enemigo comienza desde el primer punto de patrullaje
 
-    void Update()
+    void Start()
     {
-        if(transform.position != wayPoints[currentWayPoint].position)
+        StartCoroutine(Patrol());
+    }
+
+    IEnumerator Patrol()
+    {
+        while (true)
         {
-            transform.position = Vector2.MoveTowards(transform.position, wayPoints[currentWayPoint].position, speed * Time.deltaTime);
-        }
-        if(!isWaiting)
-        {
-            Debug.Log("Esperando en el waypoint " + currentWayPoint);
-            StartCoroutine(Wait());
+            yield return StartCoroutine(MoveToNextWaypoint());
+            yield return new WaitForSeconds(waitTime);
         }
     }
 
-    IEnumerator Wait()
+    IEnumerator MoveToNextWaypoint()
     {
-        isWaiting = true;
-        yield return new WaitForSeconds(waitTime);
-        currentWayPoint++;
+        int nextWayPoint = (currentWayPoint + 1) % wayPoints.Length;
+        Vector3 targetPosition = wayPoints[nextWayPoint].position;
 
-        if(currentWayPoint == wayPoints.Length)
+        while (Vector3.Distance(transform.position, targetPosition) > 0.1f)
         {
-            currentWayPoint = 0;
+            transform.position = Vector2.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
+            yield return null;
         }
-        isWaiting = false;
 
+        currentWayPoint = nextWayPoint;
         Flip();
     }
 
-    private void Flip()
+private void Flip()
     {
         if(transform.position.x > wayPoints[currentWayPoint].position.x)
         {
