@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    enum States { Idle, Walk, MeleeAttack };
+    enum States { Idle, Walk, MeleeAttack, RangeAttack };
     public float speed = 5f;
     Rigidbody2D m_rb;
     States m_state;
@@ -88,6 +88,24 @@ public class PlayerController : MonoBehaviour
                 }
                 break;
 
+            case States.RangeAttack:
+
+                if (last_printed_state != "rangeattack")
+                {
+                    last_printed_state = "rangeattack";
+                    Debug.Log("rangeattack");
+                }
+                if ((m_rb.velocity.y == 0) && (m_rb.velocity.x == 0))
+                {
+                    m_state = States.Idle;
+                }
+
+                else if ((m_rb.velocity.y != 0) && (m_rb.velocity.x != 0))
+                {
+                    m_state = States.Walk;
+                }
+                break;
+
 
         }
 
@@ -99,6 +117,11 @@ public class PlayerController : MonoBehaviour
                 {
                     m_state = States.MeleeAttack;
                     playerAttack.AtaqueCuerpo(); // Activar el ataque melee
+                }
+                if (Input.GetButtonDown("Fire2"))
+                {
+                    m_state = States.RangeAttack;
+                    playerAttack.AtaqueMagia(); // Activar el ataque melee
                 }
                 break;
 
@@ -132,7 +155,11 @@ public class PlayerController : MonoBehaviour
                     m_state = States.MeleeAttack;
                     playerAttack.AtaqueCuerpo(); // Activar el ataque melee
                 }
-
+                else if (Input.GetButtonDown("Fire2"))
+                {
+                    m_state = States.RangeAttack;
+                    playerAttack.AtaqueMagia(); // Activar el ataque melee
+                }
                 break;
 
             case States.MeleeAttack:

@@ -10,8 +10,8 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private float tiempoEntreAtaques;
     [SerializeField] private float tiempoSiguienteAtaque;
 
-    //[SerializeField] private GameObject magia;
-    //[SerializeField] private Transform controladorDisparo;
+    [SerializeField] private GameObject magia;
+    [SerializeField] private Transform controladorDisparo;
     [SerializeField] private float retrocesoAmount; // Distancia de retroceso
     [SerializeField] private float retrocesoDuration;
     //private Animator animator;
@@ -52,6 +52,16 @@ public class PlayerAttack : MonoBehaviour
             tiempoSiguienteAtaque = tiempoEntreAtaques;
         }
     }
+
+    public void AtaqueMagia()
+    {
+        if (tiempoSiguienteAtaque <= 0)
+        {
+            GolpeMagia();
+
+            tiempoSiguienteAtaque = tiempoEntreAtaques;
+        }
+    }
     public void GolpeMele()
     {
         // Tu código actual para el golpe melee
@@ -77,7 +87,10 @@ public class PlayerAttack : MonoBehaviour
             }
         }
     }
-
+    private void GolpeMagia()
+    {
+        Instantiate(magia, controladorDisparo.position, controladorDisparo.rotation);
+    }
     public IEnumerator Retroceso(Transform target, Vector3 targetPosition, float duration)
     {
         float elapsedTime = 0f;
