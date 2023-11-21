@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Tilemaps;
 using UnityEngine;
 
 public class patrolEnemie : MonoBehaviour
@@ -51,4 +49,15 @@ private void Flip()
             transform.rotation = Quaternion.Euler(0f, 0f, 0f);
         }
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.gameObject.tag == "Wall")
+        {
+            Debug.Log("Cambia de direccion");
+            Flip();
+        }
+    }
 }
+
+

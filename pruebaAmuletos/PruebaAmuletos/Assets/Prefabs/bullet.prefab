@@ -127,8 +127,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
-  retrocesoAmount: 1003
-  retrocesoDuration: 1
+  retrocesoAmount: 0.5
+  retrocesoDuration: 0.2
 --- !u!58 &180808059402794933
 CircleCollider2D:
   m_ObjectHideFlags: 0
