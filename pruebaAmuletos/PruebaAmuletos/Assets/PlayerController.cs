@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    enum States { Idle, Walk };
+    enum States { Idle, Walk, MeleeAttack };
     public float speed = 5f;
     Rigidbody2D m_rb;
     States m_state;
-
+    PlayerAttack playerAttack;
     //control debug
     string last_printed_state;
 
@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     {
         m_rb = GetComponent<Rigidbody2D>();
         m_state = States.Idle;
+        playerAttack = GetComponent<PlayerAttack>();
     }
 
     // Update is called once per frame
@@ -52,6 +53,8 @@ public class PlayerController : MonoBehaviour
                 }
                 break;
 
+
+
             case States.Walk:
 
                 //DEBUG
@@ -67,6 +70,24 @@ public class PlayerController : MonoBehaviour
                 }
                 break;
 
+            case States.MeleeAttack:
+
+                if (last_printed_state != "meleattack")
+                {
+                    last_printed_state = "meleattack";
+                    Debug.Log("meleattack");
+                }
+                if ((m_rb.velocity.y == 0) && (m_rb.velocity.x == 0))
+                {
+                    m_state = States.Idle;
+                }
+                
+                else if ((m_rb.velocity.y != 0) && (m_rb.velocity.x != 0))
+                {
+                    m_state = States.Idle;
+                }
+                break;
+
 
         }
 
@@ -74,6 +95,11 @@ public class PlayerController : MonoBehaviour
         {
             case States.Idle:
                 // Animación de idle
+                if (Input.GetButtonDown("Fire1"))
+                {
+                    m_state = States.MeleeAttack;
+                    playerAttack.AtaqueCuerpo(); // Activar el ataque melee
+                }
                 break;
 
 
@@ -101,8 +127,16 @@ public class PlayerController : MonoBehaviour
                 {
                     // Voltear el sprite hacia la derecha.
                 }
+                else if (Input.GetButtonDown("Fire1"))
+                {
+                    m_state = States.MeleeAttack;
+                    playerAttack.AtaqueCuerpo(); // Activar el ataque melee
+                }
 
+                break;
 
+            case States.MeleeAttack:
+                // En este estado, se deja que el script PlayerAttack maneje el ataque, así que no se necesita lógica aquí.
                 break;
         }
 
