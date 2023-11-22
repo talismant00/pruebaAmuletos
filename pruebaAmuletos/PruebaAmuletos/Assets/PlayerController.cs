@@ -84,8 +84,10 @@ public class PlayerController : MonoBehaviour
                 
                 else if ((m_rb.velocity.y != 0) && (m_rb.velocity.x != 0))
                 {
-                    m_state = States.Idle;
+                    m_state = States.Walk;
                 }
+
+                
                 break;
 
             case States.RangeAttack:
@@ -95,6 +97,7 @@ public class PlayerController : MonoBehaviour
                     last_printed_state = "rangeattack";
                     Debug.Log("rangeattack");
                 }
+
                 if ((m_rb.velocity.y == 0) && (m_rb.velocity.x == 0))
                 {
                     m_state = States.Idle;
@@ -122,6 +125,7 @@ public class PlayerController : MonoBehaviour
                 {
                     m_state = States.RangeAttack;
                     playerAttack.AtaqueMagia(); // Activar el ataque melee
+                    //m_rb.velocity = Vector2.zero;
                 }
                 break;
 
@@ -150,20 +154,28 @@ public class PlayerController : MonoBehaviour
                 {
                     // Voltear el sprite hacia la derecha.
                 }
-                else if (Input.GetButtonDown("Fire1"))
+                if (Input.GetButtonDown("Fire1"))
                 {
                     m_state = States.MeleeAttack;
+                    m_rb.velocity = Vector2.zero;
                     playerAttack.AtaqueCuerpo(); // Activar el ataque melee
+
                 }
-                else if (Input.GetButtonDown("Fire2"))
+                if (Input.GetButtonDown("Fire2"))
                 {
                     m_state = States.RangeAttack;
-                    playerAttack.AtaqueMagia(); // Activar el ataque melee
+                    playerAttack.AtaqueMagia(); // Activar el ataque magico
+                    m_rb.velocity = Vector2.zero;
                 }
                 break;
 
             case States.MeleeAttack:
                 // En este estado, se deja que el script PlayerAttack maneje el ataque, así que no se necesita lógica aquí.
+                
+                break;
+
+            case States.RangeAttack:
+
                 break;
         }
 

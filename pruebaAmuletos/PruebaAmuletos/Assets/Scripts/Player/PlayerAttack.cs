@@ -10,6 +10,8 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private float tiempoEntreAtaques;
     [SerializeField] private float tiempoSiguienteAtaque;
 
+  
+
     [SerializeField] private GameObject magia;
     [SerializeField] private Transform controladorDisparo;
     [SerializeField] private float retrocesoAmount; // Distancia de retroceso
@@ -48,11 +50,14 @@ public class PlayerAttack : MonoBehaviour
         if (tiempoSiguienteAtaque <= 0)
         {
             GolpeMele();
-
+            
             tiempoSiguienteAtaque = tiempoEntreAtaques;
+            
         }
     }
+    
 
+    
     public void AtaqueMagia()
     {
         if (tiempoSiguienteAtaque <= 0)
