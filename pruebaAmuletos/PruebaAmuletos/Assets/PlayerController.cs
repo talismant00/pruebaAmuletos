@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     //control debug
     string last_printed_state;
 
+    public Animator animator;
     // Start is called before the first frame update
     void Start()
     {
@@ -41,6 +42,7 @@ public class PlayerController : MonoBehaviour
                 //agafem els inputs
                 movex = Input.GetAxis("Horizontal");
                 movey = Input.GetAxis("Vertical");
+
 
                 if (movex != 0 || movey != 0)
                 {
@@ -144,7 +146,9 @@ public class PlayerController : MonoBehaviour
                 // Aplicar la fuerza al Rigidbody2D para mover al personaje
                 m_rb.velocity = movement;
 
-
+                animator.SetFloat("Horizontal",movement.x);
+                animator.SetFloat("Vertical",movement.y);
+                animator.SetFloat("Speed", movement.sqrMagnitude);
                 // Voltear el sprite según la dirección.
                 if (movex < 0.0f)
                 {
