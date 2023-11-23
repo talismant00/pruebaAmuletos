@@ -12,9 +12,14 @@ public class PlayerController : MonoBehaviour
     //control debug
     string last_printed_state;
 
+    private Animator animator;
+
+    Vector3 change;
+
     // Start is called before the first frame update
     void Start()
     {
+        animator = GetComponent<Animator>();
         m_rb = GetComponent<Rigidbody2D>();
         m_state = States.Idle;
         playerAttack = GetComponent<PlayerAttack>();
@@ -39,17 +44,26 @@ public class PlayerController : MonoBehaviour
 
 
                 //agafem els inputs
-                movex = Input.GetAxis("Horizontal");
-                movey = Input.GetAxis("Vertical");
+                movex = Input.GetAxisRaw("Horizontal");
+                movey = Input.GetAxisRaw("Vertical");
+                
 
                 if (movex != 0 || movey != 0)
                 {
                     m_state = States.Walk;
+                    change = Vector3.zero;
+                    change.x = Input.GetAxisRaw("Horizontal");
+                    change.y = Input.GetAxisRaw("Vertical");
 
+                    animator.SetFloat("Horizontal", change.x);
+                    animator.SetFloat("Vertical", change.y);
+                    animator.SetBool("Moving", true);
                 }
                 else if ((m_rb.velocity.y != 0) && (m_rb.velocity.x != 0))
                 {
                     m_state = States.Walk;
+                    
+
                 }
                 break;
 
@@ -67,6 +81,7 @@ public class PlayerController : MonoBehaviour
                 if ((m_rb.velocity.y == 0) && (m_rb.velocity.x == 0))
                 {
                     m_state = States.Idle;
+                    animator.SetBool("Moving", false);
                 }
                 break;
 
@@ -106,6 +121,7 @@ public class PlayerController : MonoBehaviour
                 else if ((m_rb.velocity.y != 0) && (m_rb.velocity.x != 0))
                 {
                     m_state = States.Walk;
+                    
                 }
                 break;
 
@@ -115,6 +131,8 @@ public class PlayerController : MonoBehaviour
         switch (m_state)
         {
             case States.Idle:
+
+                
                 // Animación de idle
                 if (Input.GetButtonDown("Fire1"))
                 {
@@ -127,6 +145,8 @@ public class PlayerController : MonoBehaviour
                     playerAttack.AtaqueMagia(); // Activar el ataque melee
                     //m_rb.velocity = Vector2.zero;
                 }
+
+
                 break;
 
 
@@ -135,8 +155,8 @@ public class PlayerController : MonoBehaviour
 
 
                 //agafem els inputs
-                movex = Input.GetAxis("Horizontal");
-                movey = Input.GetAxis("Vertical");
+                movex = Input.GetAxisRaw("Horizontal");
+                movey = Input.GetAxisRaw("Vertical");
 
                 // Calcular el vector de movimiento
                 Vector2 movement = new Vector2(movex, movey) * speed;
@@ -144,7 +164,11 @@ public class PlayerController : MonoBehaviour
                 // Aplicar la fuerza al Rigidbody2D para mover al personaje
                 m_rb.velocity = movement;
 
+                //animator.SetFloat("Horizontal", movement.x);
+                //animator.SetFloat("Vertical", movement.y);
+                //animator.SetFloat("Speed", movement.sqrMagnitude);
 
+                
                 // Voltear el sprite según la dirección.
                 if (movex < 0.0f)
                 {
