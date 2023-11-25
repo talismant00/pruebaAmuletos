@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
     private Animator animator;
 
     Vector3 change;
-
+    private Vector3 lastMoveInput = Vector3.zero;
     // Start is called before the first frame update
     void Start()
     {
@@ -50,6 +50,7 @@ public class PlayerController : MonoBehaviour
 
                 if (movex != 0 || movey != 0)
                 {
+                    lastMoveInput = new Vector3(movex, movey, 0f).normalized;
                     m_state = States.Walk;
                     change = Vector3.zero;
                     change.x = Input.GetAxisRaw("Horizontal");
