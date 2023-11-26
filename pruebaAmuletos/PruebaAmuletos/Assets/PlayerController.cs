@@ -137,16 +137,27 @@ public class PlayerController : MonoBehaviour
                 // Animación de idle
                 if (Input.GetButtonDown("Fire1"))
                 {
+                    
+                    animator.SetBool("Attacking",true);
                     m_state = States.MeleeAttack;
                     playerAttack.AtaqueCuerpo(); // Activar el ataque melee
+                    
+                }
+                else
+                {
+                    animator.SetBool("Attacking", false);
                 }
                 if (Input.GetButtonDown("Fire2"))
                 {
+                    animator.SetBool("Spell", true);
                     m_state = States.RangeAttack;
                     playerAttack.AtaqueMagia(); // Activar el ataque melee
                     //m_rb.velocity = Vector2.zero;
                 }
-
+                else
+                {
+                    animator.SetBool("Spell", false);
+                }
 
                 break;
 
@@ -181,16 +192,35 @@ public class PlayerController : MonoBehaviour
                 }
                 if (Input.GetButtonDown("Fire1"))
                 {
+                    
+                    animator.SetFloat("Horizontal", movex);
+                    animator.SetFloat("Vertical", movey);
+
+                    animator.SetBool("Attacking", true);
                     m_state = States.MeleeAttack;
                     m_rb.velocity = Vector2.zero;
                     playerAttack.AtaqueCuerpo(); // Activar el ataque melee
 
+
+                }
+
+                else
+                {
+                    animator.SetBool("Attacking", false);
                 }
                 if (Input.GetButtonDown("Fire2"))
                 {
+                    animator.SetFloat("Horizontal", movex);
+                    animator.SetFloat("Vertical", movey);
+
+                    animator.SetBool("Spell", true);
                     m_state = States.RangeAttack;
                     playerAttack.AtaqueMagia(); // Activar el ataque magico
                     m_rb.velocity = Vector2.zero;
+                }
+                else
+                {
+                    animator.SetBool("Spell", false);
                 }
                 break;
 
