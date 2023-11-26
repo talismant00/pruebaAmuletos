@@ -456,13 +456,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66009fb76377d1945b848e3ef5bcb9e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detectionRange: 6.54
-  playerRange: 3.38
-  AttackRange: 5.33
+  detectionRange: 7.83
+  playerRange: 4.73
+  AttackRange: 1.32
   movementSpeed: 3
   retrocesoAmount: 0
   retrocesoDuration: 0
-  radioGolpe: 0.69
+  radioGolpe: 0.93
   "da\xF1oGolpe": 0
   tiempoEntreAtaques: 0
   tiempoSiguienteAtaque: 0
