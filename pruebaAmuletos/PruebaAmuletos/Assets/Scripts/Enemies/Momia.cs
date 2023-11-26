@@ -24,9 +24,12 @@ public class Momia : MonoBehaviour
     private Rigidbody2D rb;
     [SerializeField] private Transform controladorGolpe;
     public Transform[] puntosDePatrullaje;
+    
+    private Animator animator;
 
     private void Start()
     {
+        animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         player = GameObject.FindGameObjectWithTag(playerTag).transform;
     }
@@ -39,6 +42,7 @@ public class Momia : MonoBehaviour
         if (isChasing && isAnotherEnemyNearby)
         {
             ChasePlayer();
+
         }
         else if (!isChasing)
         {
@@ -87,7 +91,9 @@ public class Momia : MonoBehaviour
     {
         Vector2 direction = (player.position - transform.position).normalized;
         float distanceToPlayer = Vector2.Distance(transform.position, player.position);
-
+        animator.SetFloat("Horizontal", direction.x);
+        animator.SetFloat("Vertical", direction.y);
+        animator.SetBool("Moving", true);
         if (distanceToPlayer <= AttackRange)
         {
             AttackPlayer();
@@ -102,6 +108,7 @@ public class Momia : MonoBehaviour
     private void StopChase()
     {
         rb.velocity = Vector2.zero;
+        animator.SetBool("Moving", false);
     }
 
     private void AttackPlayer()
@@ -142,6 +149,9 @@ public class Momia : MonoBehaviour
         Vector2 direction = (transform.position - player.position).normalized;
         rb.velocity = direction * movementSpeed;
         Debug.Log("huir");
+        animator.SetFloat("Horizontal", direction.x);
+        animator.SetFloat("Vertical", direction.y);
+        animator.SetBool("Moving", true);
     }
 
     public IEnumerator Retroceso(Transform target, Vector3 targetPosition, float duration)
