@@ -20,21 +20,21 @@ public class Flecha : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
-            Vector2 direction = (collision.transform.position - transform.position).normalized;
+            //Vector2 direction = (collision.transform.position - transform.position).normalized;
 
-            GameObject player = collision.gameObject;
-            //enemigo.TomarDaño(dañoGolpe);
+            //GameObject player = collision.gameObject;
+            ////enemigo.TomarDaño(dañoGolpe);
 
-            // Calcular la dirección de retroceso
-            Vector3 retrocesoDirection = (player.transform.position - transform.position).normalized;
+            //// Calcular la dirección de retroceso
+            //Vector3 retrocesoDirection = (player.transform.position - transform.position).normalized;
 
-            // Calcular la posición final de retroceso
-            Vector3 targetPosition = player.transform.position + retrocesoDirection * retrocesoAmount;
+            //// Calcular la posición final de retroceso
+            //Vector3 targetPosition = player.transform.position + retrocesoDirection * retrocesoAmount;
 
 
             GetComponent<Collider2D>().enabled = false;
             GetComponent<SpriteRenderer>().enabled = false;
-            StartCoroutine(Retroceso(player.transform, targetPosition, retrocesoDuration));
+            //StartCoroutine(Retroceso(player.transform, targetPosition, retrocesoDuration));
             Destroy(this.gameObject, 1);
         }
         if (collision.gameObject.tag == "Wall")
@@ -44,18 +44,18 @@ public class Flecha : MonoBehaviour
 
 
     }
-    public IEnumerator Retroceso(Transform target, Vector3 targetPosition, float duration)
-    {
-        float elapsedTime = 0f;
-        Vector3 initialPosition = target.position;
+    //public IEnumerator Retroceso(Transform target, Vector3 targetPosition, float duration)
+    //{
+    //    float elapsedTime = 0f;
+    //    Vector3 initialPosition = target.position;
 
-        while (elapsedTime < duration)
-        {
-            target.position = Vector3.Lerp(initialPosition, targetPosition, elapsedTime / duration);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
+    //    while (elapsedTime < duration)
+    //    {
+    //        target.position = Vector3.Lerp(initialPosition, targetPosition, elapsedTime / duration);
+    //        elapsedTime += Time.deltaTime;
+    //        yield return null;
+    //    }
 
-        target.position = targetPosition;
-    }
+    //    target.position = targetPosition;
+    //}
 }
