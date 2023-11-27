@@ -13,6 +13,7 @@ public class Flecha : MonoBehaviour
     {
         // Mover la bala hacia adelante en la dirección de su eje Z (eje de adelante)
         transform.Translate(Vector2.down * velocidad * Time.deltaTime);
+        Destroy(this.gameObject, 3);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -35,6 +36,10 @@ public class Flecha : MonoBehaviour
             GetComponent<SpriteRenderer>().enabled = false;
             StartCoroutine(Retroceso(player.transform, targetPosition, retrocesoDuration));
             Destroy(this.gameObject, 1);
+        }
+        if (collision.gameObject.tag == "Wall")
+        {
+            Destroy(this.gameObject);
         }
 
 
