@@ -1,17 +1,16 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Tilemaps;
+using System.Linq;
+using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 
-public class EnemigoDistancia : MonoBehaviour
+public class RangeEnemy : MonoBehaviour
 {
-    public Transform[] points;
-    private int destPoint = 0;
     public float speed;
 
-    private float waitTimeCounter;
-    private bool isWaiting;
+    public Transform[] puntosPatrulla;
+    int indicePuntoActual = 0;
 
     public Transform jugador; // Referencia al transform del jugador
     public float rangoDisparo = 5f; // Rango de disparo del enemigo
@@ -23,17 +22,19 @@ public class EnemigoDistancia : MonoBehaviour
     private bool puedeDisparar = true; // Indica si el enemigo puede disparar
     string last_printed_state;
     private Animator animator;
+
     enum States { Idle, Walk, MantenerRango, RangeAttack };
     States m_state;
 
     private void Start()
     {
         animator = GetComponent<Animator>();
-        Patrol();
+        
         m_state = States.Walk;
     }
     void Update()
     {
+        
         float distanciaAlJugador = Vector3.Distance(transform.position, jugador.position);
         switch (m_state)
         {
@@ -46,6 +47,11 @@ public class EnemigoDistancia : MonoBehaviour
                     Debug.Log("idle");
                 }
 
+                else if (distanciaAlJugador >= rangoDisparo && distanciaAlJugador > distanciaMinima)
+                {
+                    m_state = States.Walk;
+                }
+                
                 if (distanciaAlJugador <= rangoDisparo && puedeDisparar)
                 {
                     m_state = States.RangeAttack;
@@ -82,6 +88,11 @@ public class EnemigoDistancia : MonoBehaviour
 
             case States.MantenerRango:
 
+                if (distanciaAlJugador > distanciaMinima && distanciaAlJugador <= rangoDisparo && puedeDisparar)
+                {
+                    m_state = States.RangeAttack;
+                }
+
                 if (distanciaAlJugador > distanciaMinima)
                 {
                     m_state = States.Walk;
@@ -90,7 +101,12 @@ public class EnemigoDistancia : MonoBehaviour
                 break;
 
             case States.RangeAttack:
-                
+
+                if (distanciaAlJugador > rangoDisparo)
+                {
+                    m_state = States.Walk;
+                }
+
                 if (distanciaAlJugador < distanciaMinima)
                 {
                     m_state = States.MantenerRango;
@@ -113,6 +129,19 @@ public class EnemigoDistancia : MonoBehaviour
 
                 animator.SetBool("Moving", true);
                 
+                if (distanciaAlJugador <= rangoDisparo && puedeDisparar)
+                {
+                    DispararAlJugador();
+                }
+                else if (distanciaAlJugador <= distanciaMinima)
+                {
+                    MantenerRango();
+                }
+                else
+                {
+                    MoveToNextPatrolPoint();
+                }
+                
                 break;
 
             case States.MantenerRango:
@@ -126,7 +155,7 @@ public class EnemigoDistancia : MonoBehaviour
                 break;
 
             case States.RangeAttack:
-                
+
                 if (distanciaAlJugador <= rangoDisparo && puedeDisparar)
                 {
                     animator.SetBool("Moving", false);
@@ -139,7 +168,7 @@ public class EnemigoDistancia : MonoBehaviour
         }
     }
 
-    
+
 
 
     void DispararAlJugador()
@@ -149,47 +178,37 @@ public class EnemigoDistancia : MonoBehaviour
     }
     void MantenerRango()
     {
-        
+
         Vector3 direccionRetroceso = (transform.position - jugador.position).normalized;
         transform.position += direccionRetroceso * velocidadRetroceso * Time.deltaTime;
-        
     }
 
-    void Patrol()
-    {
-        if (points.Length == 0)
-            return;
 
-        if (!isWaiting)
+    void MoveToNextPatrolPoint()
+    {
+        if (puntosPatrulla.Length > 0)
         {
-            Vector2 target = points[destPoint].position;
-            Vector2 newPos = Vector2.MoveTowards(transform.position, target, speed * Time.deltaTime);
-            GetComponent<Rigidbody2D>().MovePosition(newPos);
-            animator.SetFloat("Horizontal", newPos.x - transform.position.x);
-            animator.SetFloat("Vertical", newPos.y - transform.position.y);
-            animator.SetBool("Moving", true);
-            if (Vector2.Distance(transform.position, target) < 0.1f)
+            Vector3 objetivo = puntosPatrulla[indicePuntoActual].position;
+            float distanciaAlObjetivo = Vector3.Distance(transform.position, objetivo);
+
+            if (distanciaAlObjetivo > 0.1f)
             {
-                state = State.Waiting;
-                animator.SetBool("Moving", false);
-                isWaiting = true;
-                waitTimeCounter = waitTime;
-            }
-        }
-        else
-        {
-            if (waitTimeCounter > 0)
-            {
-                waitTimeCounter -= Time.deltaTime;
+                // Mover hacia el punto de patrulla
+                Vector3 direccion = (objetivo - transform.position).normalized;
+                transform.position += direccion * speed * Time.deltaTime;
+                animator.SetFloat("Horizontal", direccion.x);
+                animator.SetFloat("Vertical", direccion.y);
             }
             else
             {
-                destPoint = (destPoint + 1) % points.Length;
-                state = State.Patrolling;
-                isWaiting = false;
+                // Cambiar al siguiente punto de patrulla
+                indicePuntoActual = (indicePuntoActual + 1) % puntosPatrulla.Length;
             }
         }
     }
+
+
+   
 
     //System.Collections.IEnumerator EsperarParaDisparar()
     //{
@@ -207,4 +226,3 @@ public class EnemigoDistancia : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, distanciaMinima);
     }
 }
-

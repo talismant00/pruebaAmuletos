@@ -897,13 +897,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 317282754}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9597eeef518e0d040a01e05c5511cab6, type: 3}
+  m_Script: {fileID: 11500000, guid: 11108e78617f86d4ba29a6880a975381, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  points:
+  speed: 5
+  puntosPatrulla:
   - {fileID: 1220457452}
   - {fileID: 1655531892}
-  speed: 5
+  - {fileID: 648451112}
+  - {fileID: 1892277996}
   jugador: {fileID: 1454820401}
   rangoDisparo: 5
   distanciaMinima: 2.5
@@ -1447,7 +1449,7 @@ Transform:
   m_GameObject: {fileID: 648451111}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2, y: 0.92, z: 0.07375112}
+  m_LocalPosition: {x: -4.87, y: 0.92, z: 0.07375112}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2306,7 +2308,7 @@ Transform:
   m_GameObject: {fileID: 1220457451}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1, y: 2, z: 0.07375112}
+  m_LocalPosition: {x: 5.92, y: 2, z: 0.07375112}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2798,7 +2800,7 @@ Transform:
   m_GameObject: {fileID: 1655531891}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2, y: 2, z: 0.07375112}
+  m_LocalPosition: {x: -7.15, y: 2, z: 0.07375112}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3506,7 +3508,7 @@ Transform:
   m_GameObject: {fileID: 1892277995}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1, y: 1, z: 0.07375112}
+  m_LocalPosition: {x: 1, y: -1.16, z: 0.07375112}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
