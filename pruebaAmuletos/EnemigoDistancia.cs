@@ -76,6 +76,10 @@ public class EnemigoDistancia : MonoBehaviour
 
             case States.RangeAttack:
                 
+                if (distanciaAlJugador < distanciaMinima)
+                {
+                    m_state = States.MantenerRango;
+                }
 
                 break;
 
@@ -92,11 +96,12 @@ public class EnemigoDistancia : MonoBehaviour
 
             case States.Walk:
 
+                animator.SetBool("Moving", true);
 
-                
                 break;
 
             case States.MantenerRango:
+                animator.SetBool("Moving", true);
 
                 if (distanciaAlJugador < distanciaMinima)
                 {
@@ -106,10 +111,11 @@ public class EnemigoDistancia : MonoBehaviour
                 break;
 
             case States.RangeAttack:
-
+                
                 if (distanciaAlJugador <= rangoDisparo && puedeDisparar)
                 {
-                    //animator.SetBool("Attacking", true);
+                    animator.SetBool("Moving", false);
+                    //animator.SetBool("Attack", true);
                     DispararAlJugador();
                     //StartCoroutine(EsperarParaDisparar());
                 }
@@ -117,6 +123,9 @@ public class EnemigoDistancia : MonoBehaviour
                 break;
         }
     }
+
+    
+
 
     void DispararAlJugador()
     {
@@ -130,6 +139,8 @@ public class EnemigoDistancia : MonoBehaviour
         transform.position += direccionRetroceso * velocidadRetroceso * Time.deltaTime;
         
     }
+
+    
     //System.Collections.IEnumerator EsperarParaDisparar()
     //{
     //    puedeDisparar = false;
