@@ -12,6 +12,7 @@ public class EnemigoDistancia : MonoBehaviour
 
     private float waitTimeCounter;
     private bool isWaiting;
+    public float waitTime;
 
     public Transform jugador; // Referencia al transform del jugador
     public float rangoDisparo = 5f; // Rango de disparo del enemigo
@@ -130,8 +131,8 @@ public class EnemigoDistancia : MonoBehaviour
                 if (distanciaAlJugador <= rangoDisparo && puedeDisparar)
                 {
                     animator.SetBool("Moving", false);
-                    //animator.SetBool("Attack", true);
-                    DispararAlJugador();
+                    animator.SetBool("Attack", true);
+                    //DispararAlJugador();
                     //StartCoroutine(EsperarParaDisparar());
                 }
 
@@ -170,7 +171,7 @@ public class EnemigoDistancia : MonoBehaviour
             animator.SetBool("Moving", true);
             if (Vector2.Distance(transform.position, target) < 0.1f)
             {
-                state = State.Waiting;
+                m_state = States.Idle;
                 animator.SetBool("Moving", false);
                 isWaiting = true;
                 waitTimeCounter = waitTime;
@@ -185,7 +186,7 @@ public class EnemigoDistancia : MonoBehaviour
             else
             {
                 destPoint = (destPoint + 1) % points.Length;
-                state = State.Patrolling;
+                //m_state = States.Patrolling;
                 isWaiting = false;
             }
         }

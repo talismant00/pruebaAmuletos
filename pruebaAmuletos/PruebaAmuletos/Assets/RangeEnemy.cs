@@ -12,6 +12,9 @@ public class RangeEnemy : MonoBehaviour
     public Transform[] puntosPatrulla;
     int indicePuntoActual = 0;
 
+    private float tiempoEspera = 0f;
+
+
     public Transform jugador; // Referencia al transform del jugador
     public float rangoDisparo = 5f; // Rango de disparo del enemigo
     public float distanciaMinima = 2.5f; // Distancia mínima que el enemigo debe mantener respecto al jugador
@@ -74,7 +77,7 @@ public class RangeEnemy : MonoBehaviour
                     Debug.Log("walk");
                 }
 
-                if (distanciaAlJugador <= rangoDisparo && puedeDisparar)
+                if (distanciaAlJugador <= rangoDisparo)
                 {
                     m_state = States.RangeAttack;
                 }
@@ -92,8 +95,7 @@ public class RangeEnemy : MonoBehaviour
                 {
                     m_state = States.RangeAttack;
                 }
-
-                if (distanciaAlJugador > distanciaMinima)
+                else if (distanciaAlJugador > distanciaMinima)
                 {
                     m_state = States.Walk;
                 }
@@ -106,8 +108,7 @@ public class RangeEnemy : MonoBehaviour
                 {
                     m_state = States.Walk;
                 }
-
-                if (distanciaAlJugador < distanciaMinima)
+                else if (distanciaAlJugador < distanciaMinima)
                 {
                     m_state = States.MantenerRango;
                 }
@@ -156,18 +157,24 @@ public class RangeEnemy : MonoBehaviour
 
             case States.RangeAttack:
 
-                if (distanciaAlJugador <= rangoDisparo && puedeDisparar)
+                if (distanciaAlJugador <= rangoDisparo && puedeDisparar && tiempoEspera <= 0)
                 {
                     animator.SetBool("Moving", false);
-                    //animator.SetBool("Attack", true);
+                    animator.SetBool("Attack", true);
                     DispararAlJugador();
-                    //StartCoroutine(EsperarParaDisparar());
+                    tiempoEspera = tiempoEntreDisparos;
+                    Invoke("ResetAttackState", 0.2f);
                 }
+                
 
                 break;
         }
     }
 
+    void ResetAttackState()
+    {
+        animator.SetBool("Attack", false);
+    }
 
 
 
@@ -181,6 +188,14 @@ public class RangeEnemy : MonoBehaviour
 
         Vector3 direccionRetroceso = (transform.position - jugador.position).normalized;
         transform.position += direccionRetroceso * velocidadRetroceso * Time.deltaTime;
+        if (direccionRetroceso != Vector3.zero)
+        {
+            // Si se está moviendo, activa la animación de movimiento
+            animator.SetBool("Moving", true);
+            animator.SetFloat("Horizontal", direccionRetroceso.x);
+            animator.SetFloat("Vertical", direccionRetroceso.y);
+        }
+        
     }
 
 
@@ -198,6 +213,7 @@ public class RangeEnemy : MonoBehaviour
                 transform.position += direccion * speed * Time.deltaTime;
                 animator.SetFloat("Horizontal", direccion.x);
                 animator.SetFloat("Vertical", direccion.y);
+
             }
             else
             {
@@ -206,9 +222,6 @@ public class RangeEnemy : MonoBehaviour
             }
         }
     }
-
-
-   
 
     //System.Collections.IEnumerator EsperarParaDisparar()
     //{
