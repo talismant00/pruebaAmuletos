@@ -21,6 +21,8 @@ public class EnemigoMele : MonoBehaviour
     private Animator animator;
     private Rigidbody2D rb;
 
+    string last_printed_state;
+
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -34,15 +36,27 @@ public class EnemigoMele : MonoBehaviour
         switch (state)
         {
             case State.Patrolling:
-                Patrol();
-
+                if (last_printed_state != "Patrolling")
+                {
+                    last_printed_state = "Patrolling";
+                    Debug.Log("Patrolling");
+                }
+               
                 if (player != null && Vector2.Distance(transform.position, player.position) < detectionRange)
                 {
                     state = State.Chasing;
                 }
+                else if (Vector2.Distance(transform.position, player.position) <= attackRange)
+                {
+                    state = State.Attacking;
+                }
                 break;
             case State.Chasing:
-                Chase();
+                if (last_printed_state != "Chasing")
+                {
+                    last_printed_state = "Chasing";
+                    Debug.Log("Chasing");
+                }
                 if (Vector2.Distance(transform.position, player.position) >= detectionRange)
                 {
                     state = State.Patrolling;
@@ -52,18 +66,59 @@ public class EnemigoMele : MonoBehaviour
                     state = State.Attacking;
                 }
                 break;
+
             case State.Waiting:
+                if (last_printed_state != "Waiting")
+                {
+                    last_printed_state = "Waiting";
+                    Debug.Log("Waiting");
+                }
                 if (player != null && Vector2.Distance(transform.position, player.position) < detectionRange)
                 {
                     state = State.Chasing;
                 }
+                else if (Vector2.Distance(transform.position, player.position) <= attackRange)
+                {
+                    state = State.Attacking;
+                }
                 break;
+
             case State.Attacking:
-                Attack();
-                if (Vector2.Distance(transform.position, player.position) >= attackRange)
+                
+                if (Vector2.Distance(transform.position, player.position) > attackRange)
                 {
                     state = State.Chasing;
                 }
+                
+                break;
+        }
+
+        switch (state)
+        {
+            case State.Patrolling:
+                
+                animator.SetBool("Moving", true);
+                Patrol();
+
+                break;
+            case State.Chasing:
+                
+                animator.SetBool("Moving", true);
+                Chase();
+                
+                break;
+
+            case State.Waiting:
+                animator.SetBool("Moving", false);
+                break;
+            case State.Attacking:
+                
+                animator.SetBool("Attack", true);
+                animator.SetBool("Moving", false);
+                Invoke("ResetAttackState", 0.9f);
+                Attack();
+                
+
                 break;
         }
     }
@@ -78,7 +133,7 @@ public class EnemigoMele : MonoBehaviour
         GetComponent<Rigidbody2D>().MovePosition(newPos);
         animator.SetFloat("Horizontal", newPos.x - transform.position.x);
         animator.SetFloat("Vertical", newPos.y - transform.position.y);
-        animator.SetBool("Moving", true);
+        //animator.SetBool("Moving", true);
         if (Vector2.Distance(transform.position, target) < 0.1f)
         {
             state = State.Waiting;
@@ -108,7 +163,7 @@ public class EnemigoMele : MonoBehaviour
         if (Time.time > lastAttackTime + attackDelay)
         {
             
-            animator.SetBool("Attack", true);
+            //animator.SetBool("Attack", true);
             animator.SetBool("Moving", false);
 
 
@@ -117,11 +172,12 @@ public class EnemigoMele : MonoBehaviour
             // Aquí es donde dañarías al jugador
             // player.GetComponent<Player>().TakeDamage(attackDamage);
             lastAttackTime = Time.time;
+            
         }
-        else
-        {
-            animator.SetBool("Attack", false);
-        }
+        //else
+        //{
+        //    animator.SetBool("Attack", false);
+        //}
 
 
     }
@@ -140,8 +196,12 @@ public class EnemigoMele : MonoBehaviour
 
         target.position = targetPosition;
     }
+    void ResetAttackState()
+    {
+        animator.SetBool("Attack", false);
+    }
 
-    
+
     void OnDrawGizmos()
     {
         // Dibuja el rango de detección

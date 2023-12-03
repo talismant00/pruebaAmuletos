@@ -354,7 +354,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!95 &161914156
 Animator:
   serializedVersion: 5
@@ -524,7 +524,7 @@ MonoBehaviour:
   - {fileID: 648451112}
   - {fileID: 1892277996}
   speed: 10
-  detectionRange: 8.66
+  detectionRange: 3.08
   waitTime: 1
   attackRange: 0.8
   attackDamage: 0
@@ -1156,7 +1156,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa4bd2d4fc1ab914ea09b2189cae5064, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 1454820401}
+  target: {fileID: 161914158}
   smoothSpeed: 1
 --- !u!114 &519420034
 MonoBehaviour:
@@ -3139,7 +3139,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1655852392
 Transform:
   m_ObjectHideFlags: 0

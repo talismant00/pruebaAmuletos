@@ -37,8 +37,14 @@ public class RangeEnemy : MonoBehaviour
     }
     void Update()
     {
-        
+        if (tiempoEspera > 0)
+        {
+            tiempoEspera -= Time.deltaTime;
+        }
+
+
         float distanciaAlJugador = Vector3.Distance(transform.position, jugador.position);
+        
         switch (m_state)
         {
             case States.Idle:
@@ -86,6 +92,10 @@ public class RangeEnemy : MonoBehaviour
                 {
                     m_state = States.MantenerRango;
                 }
+                if (transform.position == Vector3.zero)
+                {
+                    m_state = States.Idle;
+                }
 
                 break;
 
@@ -99,6 +109,11 @@ public class RangeEnemy : MonoBehaviour
                 {
                     m_state = States.Walk;
                 }
+                else if (transform.position == Vector3.zero)
+                {
+                    m_state = States.Idle;
+                }
+                
 
                 break;
 
@@ -108,10 +123,11 @@ public class RangeEnemy : MonoBehaviour
                 {
                     m_state = States.Walk;
                 }
-                else if (distanciaAlJugador < distanciaMinima)
+                else if (transform.position == Vector3.zero)
                 {
-                    m_state = States.MantenerRango;
+                    m_state = States.Idle;
                 }
+
 
                 break;
 
@@ -132,7 +148,7 @@ public class RangeEnemy : MonoBehaviour
                 
                 if (distanciaAlJugador <= rangoDisparo && puedeDisparar)
                 {
-                    DispararAlJugador();
+                    Invoke("DispararAlJugador", 0.6f);
                 }
                 else if (distanciaAlJugador <= distanciaMinima)
                 {
@@ -152,20 +168,31 @@ public class RangeEnemy : MonoBehaviour
                 {
                     MantenerRango();
                 }
-
+                
                 break;
 
             case States.RangeAttack:
+                animator.SetBool("Moving", false);
 
                 if (distanciaAlJugador <= rangoDisparo && puedeDisparar && tiempoEspera <= 0)
+                {
+                    animator.SetBool("Moving", false);
+                    
+
+                    animator.SetBool("Attack", true);
+                    Invoke("DispararAlJugador",0.6f);
+                    tiempoEspera = tiempoEntreDisparos;
+                    Invoke("ResetAttackState", 0.7f);
+                }
+                else if (puedeDisparar && tiempoEspera <= 0)
                 {
                     animator.SetBool("Moving", false);
                     animator.SetBool("Attack", true);
                     DispararAlJugador();
                     tiempoEspera = tiempoEntreDisparos;
-                    Invoke("ResetAttackState", 0.2f);
+                    Invoke("ResetAttackState", 0.7f);
                 }
-                
+
 
                 break;
         }
@@ -182,6 +209,32 @@ public class RangeEnemy : MonoBehaviour
     {
         Debug.Log("¡El enemigo dispara al jugador!");
         GameObject bala = Instantiate(balaPrefab, puntoDisparo.position, puntoDisparo.rotation);
+
+
+        // Obtener la dirección entre el enemigo y el jugador
+        Vector3 direccionAlJugador = (jugador.position - transform.position).normalized;
+
+        // Asignar parámetros a la animación según la dirección relativa al jugador
+        animator.SetFloat("Horizontal", direccionAlJugador.x);
+        animator.SetFloat("Vertical", direccionAlJugador.y);
+
+        // Determinar la dirección principal y establecer la animación de ataque
+        if (Mathf.Abs(direccionAlJugador.x) > Mathf.Abs(direccionAlJugador.y))
+        {
+            animator.SetFloat("Horizontal", Mathf.Sign(direccionAlJugador.x));
+            animator.SetFloat("Vertical", 0);
+        }
+        else if (transform.position == Vector3.zero)
+        {
+            animator.SetBool("Moving", false);
+        }
+        else
+        {
+            animator.SetFloat("Horizontal", 0);
+            animator.SetFloat("Vertical", Mathf.Sign(direccionAlJugador.y));
+        }
+
+
     }
     void MantenerRango()
     {
@@ -195,7 +248,11 @@ public class RangeEnemy : MonoBehaviour
             animator.SetFloat("Horizontal", direccionRetroceso.x);
             animator.SetFloat("Vertical", direccionRetroceso.y);
         }
-        
+        else if (transform.position == Vector3.zero)
+        {
+            animator.SetBool("Moving", false);
+        }
+
     }
 
 
