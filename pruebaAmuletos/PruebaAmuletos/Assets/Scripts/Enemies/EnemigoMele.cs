@@ -22,7 +22,7 @@ public class EnemigoMele : MonoBehaviour
     private float lastAttackTime;
     private int destPoint = 0;
     private Transform player;
-    private enum State { Patrolling, Chasing, Waiting, Attacking }
+    private enum State { Patrolling, Chasing, Waiting, Attacking, Hit }
     private State state;
 
     private Animator animator;
@@ -32,6 +32,7 @@ public class EnemigoMele : MonoBehaviour
 
     void Start()
     {
+        RecibirGolpe();
         animator = GetComponent<Animator>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
         rb = GetComponent<Rigidbody2D>();
@@ -90,6 +91,10 @@ public class EnemigoMele : MonoBehaviour
                 }
                 break;
 
+            case State.Hit:
+                
+                break;
+
             case State.Attacking:
                 
                 if (Vector2.Distance(transform.position, player.position) > attackRange)
@@ -118,6 +123,13 @@ public class EnemigoMele : MonoBehaviour
             case State.Waiting:
                 animator.SetBool("Moving", false);
                 break;
+
+            case State.Hit:
+                // Ejecutar animación y lógica para el golpe recibido
+                animator.SetTrigger("Hit");
+                // Agrega aquí la lógica adicional para manejar el golpe recibido
+                break;
+
             case State.Attacking:
                 
                 animator.SetBool("Attack", true);
@@ -226,7 +238,12 @@ public class EnemigoMele : MonoBehaviour
     {
         animator.SetBool("Attack", false);
     }
-
+    public void RecibirGolpe()
+    {
+        // Inicia la animación de golpe
+        animator.SetBool("Hit", true);
+        // Agrega cualquier lógica adicional para manejar el golpe recibido
+    }
 
     void OnDrawGizmos()
     {
