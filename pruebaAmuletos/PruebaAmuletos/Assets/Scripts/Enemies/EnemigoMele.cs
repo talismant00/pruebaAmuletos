@@ -1,17 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
 public class EnemigoMele : MonoBehaviour
 {
-    public Transform[] points;
+
+    [SerializeField] private float retrocesoAmount; // Distancia de retroceso
+    [SerializeField] private float retrocesoDuration;
+    public Transform[] points; //Puntos Patrullaje
     public float speed;
-    public float detectionRange;
+    public float detectionRange; //Rango de deteccion del player
     public float waitTime;
     public float attackRange;
     public int attackDamage;
     public float attackDelay;
+    [SerializeField] private float radioGolpe;
+    [SerializeField] private Transform controladorGolpe;
     private float lastAttackTime;
     private int destPoint = 0;
     private Transform player;
@@ -162,17 +169,35 @@ public class EnemigoMele : MonoBehaviour
     {
         if (Time.time > lastAttackTime + attackDelay)
         {
-            
+
             //animator.SetBool("Attack", true);
             animator.SetBool("Moving", false);
 
 
             Debug.Log("Atacando al player");
-            
+
             // Aquí es donde dañarías al jugador
-            // player.GetComponent<Player>().TakeDamage(attackDamage);
+            //player.GetComponent<Player>().TakeDamage(attackDamage);
             lastAttackTime = Time.time;
-            
+
+            Collider2D[] objetos = Physics2D.OverlapCircleAll(controladorGolpe.position, radioGolpe);
+            foreach (Collider2D colisionador in objetos)
+            {
+                if (colisionador.CompareTag("Player"))
+                {
+                    PlayerController player = colisionador.transform.GetComponent<PlayerController>();
+                    //enemigo.TomarDaño(dañoGolpe);
+
+                    // Calcular la dirección de retroceso
+                    Vector3 retrocesoDirection = (player.transform.position - transform.position).normalized;
+
+                    // Calcular la posición final de retroceso
+                    Vector3 targetPosition = player.transform.position + retrocesoDirection * retrocesoAmount;
+
+                    // Iniciar la corrutina de retroceso
+                    StartCoroutine(Retroceso(player.transform, targetPosition, retrocesoDuration));
+                }
+            }
         }
         else
         {
@@ -181,7 +206,8 @@ public class EnemigoMele : MonoBehaviour
 
 
     }
-
+   
+    
     public IEnumerator Retroceso(Transform target, Vector3 targetPosition, float duration)
     {
         float elapsedTime = 0f;

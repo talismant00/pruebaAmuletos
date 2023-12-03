@@ -518,6 +518,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac840e7810d9df44da3cb8b72aa17a47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  retrocesoAmount: 1
+  retrocesoDuration: 0.2
   points:
   - {fileID: 1220457452}
   - {fileID: 1655531892}
@@ -529,6 +531,8 @@ MonoBehaviour:
   attackRange: 0.8
   attackDamage: 0
   attackDelay: 2
+  radioGolpe: 1
+  controladorGolpe: {fileID: 1855276943}
 --- !u!1 &174228263
 GameObject:
   m_ObjectHideFlags: 0
