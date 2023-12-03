@@ -174,10 +174,10 @@ public class EnemigoMele : MonoBehaviour
             lastAttackTime = Time.time;
             
         }
-        //else
-        //{
-        //    animator.SetBool("Attack", false);
-        //}
+        else
+        {
+            Invoke("ResetAttackState", 0.9f);
+        }
 
 
     }
