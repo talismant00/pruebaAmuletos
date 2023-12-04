@@ -148,7 +148,13 @@ public class RangeEnemy : MonoBehaviour
                 
                 if (distanciaAlJugador <= rangoDisparo && puedeDisparar)
                 {
-                    Invoke("DispararAlJugador", 0.6f);
+                    animator.SetBool("Moving", false);
+
+
+                    animator.SetBool("Attack", true);
+                    //Invoke("DispararAlJugador",0.6f);
+                    tiempoEspera = tiempoEntreDisparos;
+                    Invoke("ResetAttackState", 0.7f);
                 }
                 else if (distanciaAlJugador <= distanciaMinima)
                 {
@@ -180,7 +186,7 @@ public class RangeEnemy : MonoBehaviour
                     
 
                     animator.SetBool("Attack", true);
-                    Invoke("DispararAlJugador",0.6f);
+                    //Invoke("DispararAlJugador",0.6f);
                     tiempoEspera = tiempoEntreDisparos;
                     Invoke("ResetAttackState", 0.7f);
                 }
@@ -188,7 +194,7 @@ public class RangeEnemy : MonoBehaviour
                 {
                     animator.SetBool("Moving", false);
                     animator.SetBool("Attack", true);
-                    DispararAlJugador();
+                    //DispararAlJugador();
                     tiempoEspera = tiempoEntreDisparos;
                     Invoke("ResetAttackState", 0.7f);
                 }
@@ -205,7 +211,7 @@ public class RangeEnemy : MonoBehaviour
 
 
 
-    void DispararAlJugador()
+    public void DispararAlJugador()
     {
         Debug.Log("¡El enemigo dispara al jugador!");
         GameObject bala = Instantiate(balaPrefab, puntoDisparo.position, puntoDisparo.rotation);

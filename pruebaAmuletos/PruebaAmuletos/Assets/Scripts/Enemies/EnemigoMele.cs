@@ -32,7 +32,7 @@ public class EnemigoMele : MonoBehaviour
 
     void Start()
     {
-        RecibirGolpe();
+        
         animator = GetComponent<Animator>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
         rb = GetComponent<Rigidbody2D>();
@@ -135,7 +135,7 @@ public class EnemigoMele : MonoBehaviour
                 animator.SetBool("Attack", true);
                 animator.SetBool("Moving", false);
                 Invoke("ResetAttackState", 0.9f);
-                Attack();
+                //Invoke("Attack", 0.65f);
                 
 
                 break;

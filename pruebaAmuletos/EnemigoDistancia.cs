@@ -128,7 +128,7 @@ public class EnemigoDistancia : MonoBehaviour
     
 
 
-    void DispararAlJugador()
+    public void DispararAlJugador()
     {
         animator.SetBool("Attack", true);
         Debug.Log("¡El enemigo dispara al jugador!");
