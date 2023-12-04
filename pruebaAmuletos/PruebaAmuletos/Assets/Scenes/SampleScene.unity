@@ -528,9 +528,9 @@ MonoBehaviour:
   speed: 10
   detectionRange: 3.08
   waitTime: 1
-  attackRange: 0.8
+  attackRange: 0.6
   attackDamage: 0
-  attackDelay: 1.8
+  attackDelay: 0
   radioGolpe: 1
   controladorGolpe: {fileID: 1855276943}
 --- !u!1 &253431213
