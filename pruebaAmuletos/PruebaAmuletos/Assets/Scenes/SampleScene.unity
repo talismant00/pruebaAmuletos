@@ -576,7 +576,6 @@ GameObject:
   m_Component:
   - component: {fileID: 317282755}
   - component: {fileID: 317282756}
-  - component: {fileID: 317282757}
   - component: {fileID: 317282759}
   - component: {fileID: 317282758}
   - component: {fileID: 317282760}
@@ -657,25 +656,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &317282757
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 317282754}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91cb2db425fdc854386564a5d3bfa578, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  jugador: {fileID: 1454820401}
-  rangoDisparo: 5
-  distanciaMinima: 3.64
-  velocidadRetroceso: 2
-  balaPrefab: {fileID: 6145511000316280973, guid: 6be46692bc604374d80e5b6748fe99cb, type: 3}
-  puntoDisparo: {fileID: 859488671}
-  tiempoEntreDisparos: 2
 --- !u!61 &317282758
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -948,7 +928,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa4bd2d4fc1ab914ea09b2189cae5064, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 1454820401}
+  target: {fileID: 317282755}
   smoothSpeed: 1
 --- !u!114 &519420034
 MonoBehaviour:
@@ -2189,7 +2169,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1655852392
 Transform:
   m_ObjectHideFlags: 0

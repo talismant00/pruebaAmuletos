@@ -183,9 +183,31 @@ public class RangeEnemy : MonoBehaviour
                 if (distanciaAlJugador <= rangoDisparo && puedeDisparar && tiempoEspera <= 0)
                 {
                     animator.SetBool("Moving", false);
-                    
 
                     animator.SetBool("Attack", true);
+                    
+
+                    Vector3 direccionAlJugador = (jugador.position - transform.position).normalized;
+
+                    // Asignar parámetros a la animación según la dirección relativa al jugador
+                    animator.SetFloat("Horizontal", direccionAlJugador.x);
+                    animator.SetFloat("Vertical", direccionAlJugador.y);
+
+                    // Determinar la dirección principal y establecer la animación de ataque
+                    if (Mathf.Abs(direccionAlJugador.x) > Mathf.Abs(direccionAlJugador.y))
+                    {
+                        animator.SetFloat("Horizontal", Mathf.Sign(direccionAlJugador.x));
+                        animator.SetFloat("Vertical", 0);
+                    }
+                    else if (transform.position == Vector3.zero)
+                    {
+                        animator.SetBool("Moving", false);
+                    }
+                    else
+                    {
+                        animator.SetFloat("Horizontal", 0);
+                        animator.SetFloat("Vertical", Mathf.Sign(direccionAlJugador.y));
+                    }
                     //Invoke("DispararAlJugador",0.6f);
                     tiempoEspera = tiempoEntreDisparos;
                     Invoke("ResetAttackState", 0.7f);
@@ -220,25 +242,25 @@ public class RangeEnemy : MonoBehaviour
         // Obtener la dirección entre el enemigo y el jugador
         Vector3 direccionAlJugador = (jugador.position - transform.position).normalized;
 
-        // Asignar parámetros a la animación según la dirección relativa al jugador
-        animator.SetFloat("Horizontal", direccionAlJugador.x);
-        animator.SetFloat("Vertical", direccionAlJugador.y);
+        //Asignar parámetros a la animación según la dirección relativa al jugador
+        //animator.SetFloat("Horizontal", direccionAlJugador.x);
+        //animator.SetFloat("Vertical", direccionAlJugador.y);
 
-        // Determinar la dirección principal y establecer la animación de ataque
-        if (Mathf.Abs(direccionAlJugador.x) > Mathf.Abs(direccionAlJugador.y))
-        {
-            animator.SetFloat("Horizontal", Mathf.Sign(direccionAlJugador.x));
-            animator.SetFloat("Vertical", 0);
-        }
-        else if (transform.position == Vector3.zero)
-        {
-            animator.SetBool("Moving", false);
-        }
-        else
-        {
-            animator.SetFloat("Horizontal", 0);
-            animator.SetFloat("Vertical", Mathf.Sign(direccionAlJugador.y));
-        }
+        //Determinar la dirección principal y establecer la animación de ataque
+        //if (Mathf.Abs(direccionAlJugador.x) > Mathf.Abs(direccionAlJugador.y))
+        //{
+        //    animator.SetFloat("Horizontal", Mathf.Sign(direccionAlJugador.x));
+        //    animator.SetFloat("Vertical", 0);
+        //}
+        //else if (transform.position == Vector3.zero)
+        //{
+        //    animator.SetBool("Moving", false);
+        //}
+        //else
+        //{
+        //    animator.SetFloat("Horizontal", 0);
+        //    animator.SetFloat("Vertical", Mathf.Sign(direccionAlJugador.y));
+        //}
 
 
     }
