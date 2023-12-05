@@ -183,6 +183,7 @@ public class RangeEnemy : MonoBehaviour
                 if (distanciaAlJugador <= rangoDisparo && puedeDisparar && tiempoEspera <= 0)
                 {
                     animator.SetBool("Moving", false);
+
                     animator.SetBool("Attack", true);
                     
 
