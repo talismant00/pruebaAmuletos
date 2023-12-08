@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -35,7 +36,7 @@ public class EnemigoMele : MonoBehaviour
         
         animator = GetComponent<Animator>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
-        rb = GetComponent<Rigidbody2D>();
+        //rb = GetComponent<Rigidbody2D>();
         state = State.Patrolling;
     }
 
@@ -142,16 +143,35 @@ public class EnemigoMele : MonoBehaviour
         }
     }
 
+    //void Patrol()
+    //{
+    //    if (points.Length == 0)
+    //        return;
+
+    //    Vector2 target = points[destPoint].position;
+    //    Vector2 newPos = Vector2.MoveTowards(transform.position, target, speed * Time.deltaTime);
+    //    GetComponent<Rigidbody2D>().MovePosition(newPos);
+    //    animator.SetFloat("Horizontal", newPos.x - transform.position.x);
+    //    animator.SetFloat("Vertical", newPos.y - transform.position.y);
+    //    //animator.SetBool("Moving", true);
+    //    if (Vector2.Distance(transform.position, target) < 0.1f)
+    //    {
+    //        state = State.Waiting;
+    //        animator.SetBool("Moving", false);
+    //        StartCoroutine(WaitAtPoint());
+    //    }
+    //}
     void Patrol()
     {
         if (points.Length == 0)
             return;
 
         Vector2 target = points[destPoint].position;
-        Vector2 newPos = Vector2.MoveTowards(transform.position, target, speed * Time.deltaTime);
-        GetComponent<Rigidbody2D>().MovePosition(newPos);
-        animator.SetFloat("Horizontal", newPos.x - transform.position.x);
-        animator.SetFloat("Vertical", newPos.y - transform.position.y);
+        Vector2 direction = (target - (Vector2)transform.position).normalized;
+        Vector2 newPos = (Vector2)transform.position + direction * speed * Time.deltaTime;
+        animator.SetFloat("Horizontal", direction.x);
+        animator.SetFloat("Vertical", direction.y);
+        transform.position = newPos;
         //animator.SetBool("Moving", true);
         if (Vector2.Distance(transform.position, target) < 0.1f)
         {
@@ -160,7 +180,6 @@ public class EnemigoMele : MonoBehaviour
             StartCoroutine(WaitAtPoint());
         }
     }
-
     IEnumerator WaitAtPoint()
     {
         yield return new WaitForSeconds(waitTime);
